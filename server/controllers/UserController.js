@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
           res.status(201).json({ 
                message: "User Created Successfully",
                accessToken,
-               user: { username: newUser.username, email: newUser.email, verified: newUser.verified, userId: user._id },
+               newUser: { username: newUser.username, email: newUser.email, verified: newUser.verified, userId: newUser._id },
           })
      } catch (error) {
           console.log("Error Signing Up The User", error)

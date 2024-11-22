@@ -1,13 +1,22 @@
 const express = require('express')
+const session = require('express-session')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const authUser = require('./routes/UserRouter')
+const tweetsAuthRoutes = require('./routes/TweetsRouter')
 require("dotenv").config()
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(session({
+     secret: process.env.SESSION_SECRET || "A secret",
+     resave: false,
+     saveUninitialized: true,
+     cookie: { secure: false }
+}))
 app.use('/api/v1', authUser)
+app.use('/api/v1', tweetsAuthRoutes)
 
 
 app.get("/", (req, res) => {
