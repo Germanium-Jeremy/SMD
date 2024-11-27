@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import HeaderMobile from '../components/HeaderMobile'
 import AllTweets from '../components/AllTweets'
 import FaceBooksTweets from '../components/FaceBooksTweets'
@@ -7,6 +7,9 @@ import IGTweets from '../components/IGTweets'
 import TelegramTweets from '../components/TelegramTweets'
 import Account from '../components/Account'
 import Footer from '../components/Footer'
+import { Outlet, useSearchParams } from 'react-router-dom'
+import { TweetsContext } from '../context/TweetsContext'
+import { toast } from 'react-toastify'
 
 const headerOptions = [
      { id: 1, text: "All", color: "text-gray-950", link: "./all", component: <AllTweets /> },
@@ -18,15 +21,16 @@ const headerOptions = [
  ];
 
 const Dashboard = () => {
-     const [selectedComponent, setSelectedComponent] = useState(headerOptions[0].component)
-     const handleButtonClick = (component) => {
-          setSelectedComponent(component);
-     };
+     // const [searchParams] = useSearchParams()
+     // const status = searchParams.get('status')
+     // if (status == "success") {
+     //      toast.success("Connected to X")
+     // }
      return (
           <div className={`pt-[8rem]`}>
-               <HeaderMobile headerOptions={headerOptions} onButtonClick={handleButtonClick} />
+               <HeaderMobile />
                <div className={`flex flex-col gap-[1rem]`}>
-                    {selectedComponent}
+                    <Outlet />
                </div>
                <Footer />
           </div>

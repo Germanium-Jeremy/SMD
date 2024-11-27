@@ -28,7 +28,7 @@ export const UserProvider = ({ children }) => {
           e.preventDefault()
           setLoginLoading(true)
           try {
-               axios.post(`${apiUrl}/api/v1/auth/signin/user`, { email: emailL, password: passwordL }).then(response => {
+               axios.post(`${apiUrl}/auth/signin/user`, { email: emailL, password: passwordL }).then(response => {
                     toast.success(response.data.message)
                     localStorage.setItem("SMD_USER", JSON.stringify(response.data.user))
                     setLoginLoading(false)
@@ -64,7 +64,7 @@ export const UserProvider = ({ children }) => {
           e.preventDefault()
           setSignupLoading(true)
           try {
-               axios.post(`${apiUrl}/api/v1/auth/register/user`, { username, firstName, lastName, email: emailR, phone, password: passwordR, birthDate: dob }).then(response => {
+               axios.post(`${apiUrl}/auth/register/user`, { username, firstName, lastName, email: emailR, phone, password: passwordR, birthDate: dob }).then(response => {
                     localStorage.setItem("SMD_USER", JSON.stringify(response.data.user))
                     toast.success(response.data.message)
                     setSignupLoading(false)

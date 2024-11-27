@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const SocialMediaAccountsSchema = new mongoose.Schema({
      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-     Twitter: { platformUserId: { type: String }, accessToken: { type: String }, refreshToken: { type: String }, expiresAt: { type: Date } },
-     Facebook: { platformUserId: { type: String }, accessToken: { type: String }, refreshToken: { type: String }, expiresAt: { type: Date } },
-     Instagram: { platformUserId: { type: String }, accessToken: { type: String }, refreshToken: { type: String }, expiresAt: { type: Date } },
+     Twitter: { platformUserId: { type: String }, accessToken: { type: String }, expiresAt: { type: Date }, scope: { type: String } },
+     Facebook: { platformUserId: { type: String }, accessToken: { type: String }, expiresAt: { type: Date }, scope: { type: String } },
+     Instagram: { platformUserId: { type: String }, accessToken: { type: String }, expiresAt: { type: Date }, scope: { type: String } },
 }, {
      timestamps: true
 })

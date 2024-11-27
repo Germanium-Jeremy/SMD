@@ -1,65 +1,78 @@
 import React, { useContext } from 'react'
 import Logo from '../assets/images/SMD.png'
+import X from '../assets/images/X.png'
 import { FaFacebook, FaInstagram, FaTelegram, FaTwitter, FaXing } from 'react-icons/fa'
 import { TweetsContext } from '../context/TweetsContext'
 
 const AllTweets = () => {
      const { faceBookTweets, igTweets, xTweets, telegramTweets } = useContext(TweetsContext)
+     function formatTimestamp(timestamp) {
+          const date = new Date(timestamp);
+      
+          const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+          const formattedDate = new Intl.DateTimeFormat('en-Br', options).format(date);
+      
+          return formattedDate;
+     }
+      
      return (
           <>
-               {faceBookTweets == [] || faceBookTweets.length <= 0 || igTweets == [] || xTweets == [] || telegramTweets == [] ? (
-               <div className={`flex flex-col px-[2rem] max-[330px]:px-[1rem] font-semibold`}>
-                    Please connect your SMD account to your social media platforms
+               {xTweets == [] || xTweets.length <= 0 ? (
+               <div className={`flex flex-col gap-[1rem] font-semibold`}>
+                    <div className='flex px-[1rem] py-[2rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
+                         <div className={`h-16 w-20 rounded-full bg-gray-500 animate-pulse`}></div>
+                         <div className={`flex flex-col w-full`}>
+                              <h3 className={`text-md font-bold bg-gray-500 animate-pulse py-2 mb-1`}></h3>
+                              <p className={`text-sm bg-gray-500 animate-pulse py-2`}></p>
+                              <span className={`text-xs font-light mt-[1rem] bg-gray-500 animate-pulse py-1`}></span>
+                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700 h-6 w-6`}> <img src={Logo} alt="Logo" className={`w-full h-full`} /> </p>
+                         </div>
+                    </div>
+                    <div className='flex px-[1rem] py-[2rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
+                         <div className={`h-16 w-20 rounded-full bg-gray-500 animate-pulse`}></div>
+                         <div className={`flex flex-col w-full`}>
+                              <h3 className={`text-md font-bold bg-gray-500 animate-pulse py-2 mb-1`}></h3>
+                              <p className={`text-sm bg-gray-500 animate-pulse py-2`}></p>
+                              <span className={`text-xs font-light mt-[1rem] bg-gray-500 animate-pulse py-1`}></span>
+                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700 h-6 w-6`}> <img src={Logo} alt="Logo" className={`w-full h-full`} /> </p>
+                         </div>
+                    </div>
+                    <div className='flex px-[1rem] py-[2rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
+                         <div className={`h-16 w-20 rounded-full bg-gray-500 animate-pulse`}></div>
+                         <div className={`flex flex-col w-full`}>
+                              <h3 className={`text-md font-bold bg-gray-500 animate-pulse py-2 mb-1`}></h3>
+                              <p className={`text-sm bg-gray-500 animate-pulse py-2`}></p>
+                              <span className={`text-xs font-light mt-[1rem] bg-gray-500 animate-pulse py-1`}></span>
+                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700 h-6 w-6`}> <img src={Logo} alt="Logo" className={`w-full h-full`} /> </p>
+                         </div>
+                    </div>
+                    <div className='flex px-[1rem] py-[2rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
+                         <div className={`h-16 w-20 rounded-full bg-gray-500 animate-pulse`}></div>
+                         <div className={`flex flex-col w-full`}>
+                              <h3 className={`text-md font-bold bg-gray-500 animate-pulse py-2 mb-1`}></h3>
+                              <p className={`text-sm bg-gray-500 animate-pulse py-2`}></p>
+                              <span className={`text-xs font-light mt-[1rem] bg-gray-500 animate-pulse py-1`}></span>
+                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700 h-6 w-6`}> <img src={Logo} alt="Logo" className={`w-full h-full`} /> </p>
+                         </div>
+                    </div>                    
                </div>) : (
                     <>
-                    <div className='flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
-                         <img src={Logo} alt="Image" className={`h-16 w-16 rounded-lg`} />
-                         <div className={`flex flex-col w-full`}>
-                              <h3 className={`text-md font-bold`}>Tweet Title</h3>
-                              <p className={`text-sm`}>Tweet Description</p>
-                              <span className={`text-xs font-light mt-[1rem]`}>Tweet date</span>
-                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700`}> <FaFacebook /> </p>
-                         </div>
-                    </div>
-                    <div className='flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
-                         <img src={Logo} alt="Image" className={`h-16 w-16 rounded-lg`} />
-                         <div className={`flex flex-col w-full`}>
-                              <h3 className={`text-md font-bold`}>Tweet Title</h3>
-                              <p className={`text-sm`}>Tweet Description</p>
-                              <span className={`text-xs font-light mt-[1rem]`}>Tweet date</span>
-                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-700`}> <FaFacebook /> </p>
-                         </div>
-                    </div>
-                    <div className='flex bg-blue-100 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
-                         <img src={Logo} alt="Image" className={`h-16 w-16 rounded-lg`} />
-                         <div className={`flex flex-col w-full`}>
-                              <h3 className={`text-md font-bold`}>Tweet Title</h3>
-                              <p className={`text-sm`}>Tweet Description</p>
-                              <span className={`text-xs font-light mt-[1rem]`}>Tweet date</span>
-                              <p className={`absolute top-[.3rem] right-[.6rem] text-blue-900`}> <FaTelegram /> </p>
-                         </div>
-                    </div>
-                    <div className='flex bg-pink-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
-                         <img src={Logo} alt="Image" className={`h-16 w-16 rounded-lg`} />
-                         <div className={`flex flex-col w-full`}>
-                              <h3 className={`text-md font-bold`}>Tweet Title</h3>
-                              <p className={`text-sm`}>Tweet Description</p>
-                              <span className={`text-xs font-light mt-[1rem]`}>Tweet date</span>
-                              <p className={`absolute top-[.3rem] right-[.6rem] text-pink-700`}> <FaInstagram /> </p>
-                         </div>
-                    </div>
-                    <div className='flex bg-gray-200 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
-                         <img src={Logo} alt="Image" className={`h-16 w-16 rounded-lg`} />
-                         <div className={`flex flex-col w-full`}>
-                              <h3 className={`text-md font-bold`}>Tweet Title</h3>
-                              <p className={`text-sm`}>Tweet Description</p>
-                              <span className={`text-xs font-light mt-[1rem]`}>Tweet date</span>
-                              <p className={`absolute top-[.3rem] right-[.6rem] text-black font-extrabold`}> X </p>
-                         </div>
-                    </div>
-               </>
+                    {xTweets.map((tweet, index) => {
+                         return (
+                              <div className={`flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md ${xTweets.length < 4 && "my-[.2rem]"}`} key={index}>
+                                   <img src={tweet.image || X} alt="Image" onError={(e) => (e.target.src = X)} className={`h-16 w-16 rounded-lg`} />
+                                   <div className={`flex flex-col w-full`}>
+                                        <h3 className={`text-md font-bold`}>{tweet.title}</h3>
+                                        <p className={`text-sm`}>{tweet.text}</p>
+                                        <span className={`text-xs font-light mt-[1rem]`}>{formatTimestamp(tweet.created_at)}</span>
+                                        <p className={`absolute top-[.3rem] right-[.6rem] text-black font-extrabold`}> X </p>
+                                        <a href={tweet.link} target='_blank' className={`absolute bottom-1 right-1 text-sm font-semibold hover:text-blue-600 text-blue-900`}>View More</a>
+                                   </div>
+                              </div>
+                         )
+                    })}
+                    </>
                )}
-               
           </>
      )
 }
