@@ -18,7 +18,7 @@ const AllTweets = () => {
      return (
           <>
                {xTweets == [] || xTweets.length <= 0 ? (
-               <div className={`flex flex-col gap-[1rem] font-semibold`}>
+               <div className={`flex flex-col gap-[1rem] font-semibold sm:px-[3rem] md:px-[10rem]`}>
                     <div className='flex px-[1rem] py-[2rem] items-center gap-[1rem] relative rounded-lg shadow-md'>
                          <div className={`h-16 w-20 rounded-full bg-gray-500 animate-pulse`}></div>
                          <div className={`flex flex-col w-full`}>
@@ -59,7 +59,7 @@ const AllTweets = () => {
                     <>
                     {xTweets.map((tweet, index) => {
                          return (
-                              <div className={`flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md ${xTweets.length < 4 && "my-[.2rem]"}`} key={index}>
+                              <div className={`flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md sm:mx-[2rem] md:mx-[10rem] ${xTweets.length < 4 && "my-[.2rem]"}`} key={index}>
                                    <img src={tweet.image || X} alt="Image" onError={(e) => (e.target.src = X)} className={`h-16 w-16 rounded-lg`} />
                                    <div className={`flex flex-col w-full`}>
                                         <h3 className={`text-md font-bold`}>{tweet.title}</h3>

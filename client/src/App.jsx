@@ -33,8 +33,8 @@ function App() {
           <UserProvider>
             <TweetsProvider>
               <Routes>
-                <Route path='/' element={ !logedInUser ? <Landing /> : <Dashboard /> } />
-                <Route path='/dashboard' element={ logedInUser && <Dashboard /> }>
+                {/* <Route path='/landing' element={ !logedInUser ? <Landing /> : <Dashboard /> } /> */}
+                <Route path='/' element={ logedInUser ? <Dashboard /> : <Landing /> }>
                   <Route path='' element={ <AllTweets /> } />
                   <Route path='facebook' element={ <FaceBooksTweets /> } />
                   <Route path='x' element={ <XTweets /> } />
