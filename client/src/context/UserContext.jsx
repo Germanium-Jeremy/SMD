@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
                     localStorage.setItem("SMD_USER", JSON.stringify(response.data.user))
                     setLoginLoading(false)
                     setTimeout(() => {
-                         navigate('/dashboard')
+                         navigate('/')
                     }, 3000);
                }).catch(error => {
                     if (error.message && error.message.includes("Network Error")) {
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }) => {
                     toast.success(response.data.message)
                     setSignupLoading(false)
                     setTimeout(() => {
-                         navigate('/dashboard')
+                         navigate('/')
                     }, 3000);
                }).catch(error => {
                     if (error.message && error.message.includes("Network Error")) {
