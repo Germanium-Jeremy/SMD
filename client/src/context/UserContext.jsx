@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
           setSignupLoading(true)
           try {
                axios.post(`${apiUrl}/auth/register/user`, { username, firstName, lastName, email: emailR, phone, password: passwordR, birthDate: dob }).then(response => {
-                    localStorage.setItem("SMD_USER", JSON.stringify(response.data.user))
+                    localStorage.setItem("SMD_USER", JSON.stringify(response.data.newUser))
                     toast.success(response.data.message)
                     setSignupLoading(false)
                     setTimeout(() => {
