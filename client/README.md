@@ -1,8 +1,7 @@
-# React + Vite
+SMD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Social Media Dashboard, here to help you manage all your feeds from various authorized social medias in one place. It's simple and easy
 
-Currently, two official plugins are available:
+What to give it a try! visit [SMD](https://smd-psi.vercel.app).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+What to be part of the developers for this awesome project, contact me on Linked In [LinkedIn](https://www.linkedin.com/in/jeremie-nkundabagenzi-413a612a6)
