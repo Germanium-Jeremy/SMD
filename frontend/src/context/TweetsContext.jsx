@@ -1,12 +1,14 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserContext } from "./UserContext";
 const serverUrl = import.meta.env.VITE_APP_SERVER_URL
 
 export const TweetsContext = createContext(null)
 
 export const TweetsProvider = ({ children }) => {
+     const { userData } = useContext(UserContext)
      const [faceBookTweets, setFaceBookTweets] = useState([])
      const [igTweets, setIgTweets] = useState([])
      const [xTweets, setXTweets] = useState([])
@@ -23,20 +25,20 @@ export const TweetsProvider = ({ children }) => {
      const [telegramLoading, setTelegramLoading] = useState(false)
 
      const navigate = useNavigate()
-     const user = JSON.parse(localStorage.getItem("SMD_USER"))
+     // const user = JSON.parse(localStorage.getItem("SMD_USER"))
 
      useEffect(() => {
-          setXConnected(JSON.parse(localStorage.getItem("XConnected")) ? true : false)
+          setXConnected(true)
      }, [])
 
      const connectX = async () => {
           setXLoading(true)
-          const user = JSON.parse(localStorage.getItem("SMD_USER"))
+
           try {
                const response = await fetch(`${serverUrl}/auth/twitter/start`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: user.userId }),
+                    body: JSON.stringify({ userId: userData._id }),
                });
                setXLoading(false)
                const data = await response.json();
@@ -74,8 +76,9 @@ export const TweetsProvider = ({ children }) => {
                }
           }
      }
+
      useEffect(() => {
-          user ? fetchXTweets(user.userId) : navigate('/login')
+          fetchXTweets(userData._id)
      }, [])
 
      return (

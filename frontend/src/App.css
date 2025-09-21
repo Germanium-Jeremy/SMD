@@ -5,6 +5,10 @@
   /* font-family: ; */
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 /* App.css */
 .app {
   font-family: Arial, sans-serif;

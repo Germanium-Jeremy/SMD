@@ -3,6 +3,8 @@ import Dash from '../components/Dash'
 import Features from '../components/Features'
 import HeaderL from '../components/HeaderL'
 import Footer from '../components/Footer'
+import WhyUs from '../components/WhyUs'
+import Reviews from '../components/Reviews'
 
 const Landing = () => {
      return (
@@ -10,6 +12,8 @@ const Landing = () => {
                <HeaderL />
                <Dash />
                <Features />
+               <WhyUs />
+               <Reviews />
                <Footer />
           </div>
      )

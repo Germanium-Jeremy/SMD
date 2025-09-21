@@ -13,6 +13,7 @@ const XTweets = () => {
       
           return formattedDate;
      }
+     
      return (
           <>
           <h2 className={`font-semibold text-lg px-[2rem]`}>X Posts</h2>
