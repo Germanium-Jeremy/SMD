@@ -33,6 +33,14 @@ export const UserProvider = ({ children }) => {
                setUserData(response.data)
           } catch (error) {
                console.error("Failed to get User Data ", error.response?.data)
+               if (error.response.data.status.includes("Token Expired")) {
+                    try {
+                         const response = await axios.get(`${apiUrl}/auth/refreshToken/user`)
+                         console.log(response.data)
+                    } catch (erro) {
+                         console.warn("Failed to get a new access token: ", erro)
+                    }
+               }
           }
      }
 

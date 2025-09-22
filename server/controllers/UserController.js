@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
           const refreshToken = generateRefreshToken(newUser);
           newUser.refreshToken = refreshToken;
           await newUser.save();
-          res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3 * 60 * 60 * 1000 });
+          res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 3 * 60 * 60 * 1000 });
           res.status(201).json({token: accessToken })
      } catch (error) {
           console.log("Error Creating account: ", error)
@@ -70,7 +70,6 @@ const signInUser = async (req, res) => {
                console.log("Account not found! Check your email")
                return res.status(401).json({ error: 'Account not found! Check your email' });
           }
-          console.log("User Found: ", user)
 
           const isPasswordMatch = await bcrypt.compare(password, user.password);
           if (!isPasswordMatch) {
@@ -81,7 +80,7 @@ const signInUser = async (req, res) => {
           const refreshToken = generateRefreshToken(user);
           user.refreshToken = refreshToken;
           await user.save();
-          res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3 * 60 * 60 * 1000 });
+          res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 3 * 60 * 60 * 1000 });
           res.status(200).json({ token: accessToken });
      } catch (error) {
           console.log("Error Signing In The User", error)
@@ -107,7 +106,8 @@ const gettingUserData = async (req, res) => {
 }
 
 const handleRefreshToken = async (req, res) => { 
-     const cookies = req.cookies;
+     const cookies = req.cookie;
+     console.log("Cookies: ", cookies)
      if (!cookies?.refreshToken) return res.status(401).json({ error: 'Unauthorized' });
      const refreshToken = cookies.refreshToken;
 

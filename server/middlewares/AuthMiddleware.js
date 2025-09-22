@@ -10,8 +10,16 @@ const protect = (req, res, next) => {
           req.user = { id: decoded.id }
           next()
      } catch (error) {
-          console.warn("Not Authorized, No Token Found", error)
-          res.status(401).json({ error: 'Not Authorized, No Token Found' });
+               // Handle token verification errors
+          if (error.name === 'TokenExpiredError') {
+               // Token has expired
+               console.warn("Authorization denied, token has expired", error);
+               return res.status(401).json({ error: 'Token has expired. Please log in again.', status: "Token Expired" });
+          } else {
+               // Other verification errors
+               console.warn("Not Authorized, invalid token", error);
+               return res.status(401).json({ error: 'Not Authorized, invalid token' });
+          }
      }
 }
 

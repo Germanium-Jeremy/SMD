@@ -2,17 +2,10 @@ import React, { useContext } from 'react'
 import Logo from '../assets/images/SMD.png'
 import X from '../assets/images/X.png'
 import { TweetsContext } from '../context/TweetsContext'
+import Post from './Post'
 
 const XTweets = () => {
      const { xTweets } = useContext(TweetsContext)
-     function formatTimestamp(timestamp) {
-          const date = new Date(timestamp);
-      
-          const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
-          const formattedDate = new Intl.DateTimeFormat('en-Br', options).format(date);
-      
-          return formattedDate;
-     }
      
      return (
           <>
@@ -59,16 +52,7 @@ const XTweets = () => {
                     <>
                     {xTweets.map((tweet, index) => {
                          return (
-                              <div className={`flex bg-blue-50 px-[1rem] py-[1rem] items-center gap-[1rem] relative rounded-lg shadow-md sm:mx-[2rem] md:mx-[10rem] ${xTweets.length < 4 && "my-[.2rem]"}`} key={index}>
-                                   <img src={tweet.image || X} alt="Image" onError={(e) => (e.target.src = X)} className={`h-16 w-16 rounded-lg`} />
-                                   <div className={`flex flex-col w-full`}>
-                                        <h3 className={`text-md font-bold`}>{tweet.title}</h3>
-                                        <p className={`text-sm`}>{tweet.text}</p>
-                                        <span className={`text-xs font-light mt-[1rem]`}>{formatTimestamp(tweet.created_at)}</span>
-                                        <p className={`absolute top-[.3rem] right-[.6rem] text-black font-extrabold`}> X </p>
-                                        <a href={tweet.link} target='_blank' className={`absolute bottom-1 right-1 text-sm font-semibold hover:text-blue-600 text-blue-900`}>View More</a>
-                                   </div>
-                              </div>
+                              <Post platform={'X'} image={tweet.image || X} title={tweet.title} text={tweet.text} link={tweet.link} created_at={tweet.created_at} key={index} />
                          )
                     })}
                     </>

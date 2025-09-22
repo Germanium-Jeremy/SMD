@@ -3,12 +3,15 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "./UserContext";
-const serverUrl = import.meta.env.VITE_APP_SERVER_URL
+const serverUrl = import.meta.env.VITE_APP_SERVER_URL;
 
 export const TweetsContext = createContext(null)
 
 export const TweetsProvider = ({ children }) => {
-     const { userData } = useContext(UserContext)
+     const [activeTab, setActiveTab] = useState('all')
+     const [loading, setLoading] = useState(true)
+     const { userData, token } = useContext(UserContext)
+
      const [faceBookTweets, setFaceBookTweets] = useState([])
      const [igTweets, setIgTweets] = useState([])
      const [xTweets, setXTweets] = useState([])
@@ -25,25 +28,20 @@ export const TweetsProvider = ({ children }) => {
      const [telegramLoading, setTelegramLoading] = useState(false)
 
      const navigate = useNavigate()
-     // const user = JSON.parse(localStorage.getItem("SMD_USER"))
-
-     useEffect(() => {
-          setXConnected(true)
-     }, [])
 
      const connectX = async () => {
           setXLoading(true)
-
           try {
-               const response = await fetch(`${serverUrl}/auth/twitter/start`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: userData._id }),
+               console.log("REached the function")
+               const response = await axios.get(`${serverUrl}/auth/twitter/authorize`, {
+                    headers: {
+                         'Authorization': `Bearer ${token}`
+                    },
                });
+               console.log("Called API")
                setXLoading(false)
-               const data = await response.json();
-               if (data.url) {
-                    window.location.href = data.url;
+               if (response.data.url) {
+                    window.location.href = response.data.url;
                } else {
                     toast.warn("Unable to redirect.")
                     console.error("Failed to fetch authorization URL.");
@@ -55,10 +53,11 @@ export const TweetsProvider = ({ children }) => {
           }     
      }
 
-     const fetchXTweets = async(userId) => {
+     const fetchXTweets = async (userId) => {
+          setXLoading(true)
           try {
                const response = await axios.get(`${serverUrl}/tweets/twitter/get`, {
-                    params: { userId },
+                    headers: { 'Authorization': `Bearer ${token}` }
                });
                setXTweets(response.data)
                console.log("Tweets:", response.data);
@@ -70,19 +69,51 @@ export const TweetsProvider = ({ children }) => {
                     toast.warn("Rate limit exceeded. Please try again later.");
                } else if (error.response?.status === 401) {
                     toast.warn("Credintials changes. Please reauthorize.")
-                    // connectX()
                } else {
                     toast.warn("Could not get your feeds.");
                }
+          } finally {
+               setXLoading(false)
           }
      }
 
      useEffect(() => {
+          const getAccountsStatuses = async () => {
+               setLoading(true)
+               try {
+                    const response = await axios.get(`${serverUrl}/tweets/twitter/status`, { headers: { 'Authorization': `Bearer ${token}` } })
+                    console.log(response.data.connectObject)
+                    if (response.data.connectObject.XConnect) {
+                         setXConnected(true)
+                    }
+                    if (response.data.connectObject.IGConnect) {
+                         setIgConnected(true)
+                    }
+                    if (response.data.connectObject.FBConnect) {
+                         setFaceBookConnected(true)
+                    }
+                    if (response.data.connectObject.TConnect) {
+                         setTelegramConnected(true)
+                    }
+               } catch (error) {
+                    console.warn("Failed to get accounts statuses: ", error)
+               } finally {
+                    setLoading(false)
+               }
+          }
+
+          getAccountsStatuses()
+     }, [userData])
+
+     useEffect(() => {
           fetchXTweets(userData._id)
-     }, [])
+     }, [xConnected])
 
      return (
-          <TweetsContext.Provider value={{ faceBookTweets, igTweets, xTweets, telegramTweets, connectX, xLoading }}>
+          <TweetsContext.Provider value={{
+               faceBookTweets, igTweets, xTweets, telegramTweets, connectX, xLoading,
+               activeTab, setActiveTab, xConnected, faceBookConnected, igConnected, telegramConnected
+          }}>
                {children}
           </TweetsContext.Provider>
      )

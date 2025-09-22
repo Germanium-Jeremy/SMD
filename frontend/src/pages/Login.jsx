@@ -5,6 +5,7 @@ import { UserContext } from '../context/UserContext'
 
 const Login = () => {
      const { login, emailL, setEmailL, passwordL, setPasswordL, loginLoading } = useContext(UserContext)
+     
      return (
           <form className={`flex flex-col flex-1 justify-center items-center py-[3rem] max-[330px]:py-[1rem] sm:py-[6rem] lg:py-[5rem] px-[1rem] sm:px-[6rem] lg:px-[16rem]`} onSubmit={login}>
                <img src={Logo} alt="SMD" className={`w-20 max-[330px]:w-10 h-20 max-[330px]:h-10`} />
