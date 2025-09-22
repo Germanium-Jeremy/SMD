@@ -9,7 +9,7 @@ require("dotenv").config()
 
 const app = express()
 app.use(cors({
-     origin: 'http://localhost:5173',
+     origin: process.env.CLIENT_URL_REDIRECT_SUCCESS,
      credentials: true
 }))
 app.use(express.json())
