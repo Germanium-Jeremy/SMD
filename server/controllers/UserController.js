@@ -5,7 +5,12 @@ require('dotenv').config()
 
 const generateToken = (user) => {
      const payload = { id: user._id, email: user.email };
-     return jwt.sign(payload, process.env.JSON_WEB_TOKEN_SECRET, { expiresIn: '10h' });
+     return jwt.sign(payload, process.env.JSON_WEB_TOKEN_SECRET, { expiresIn: '1h' });
+};
+
+const generateRefreshToken = (user) => {
+     const payload = { id: user._id, email: user.email };
+     return jwt.sign(payload, process.env.JSON_WEB_TOKEN_REFRESH_SECRET, { expiresIn: '4h' });
 };
 
 const registerUser = async (req, res) => {
@@ -21,28 +26,30 @@ const registerUser = async (req, res) => {
                return res.status(400).json({ error: 'Email already exists' });
           }
 
-          let newUser = new UserModel(req.body);
-          await newUser.validate();
-
           const salt = await bcrypt.genSalt(10);
-          newUser.password = await bcrypt.hash(newUser.password, salt);
-
-
-          await newUser.save();
+          const userpasswordHashed = await bcrypt.hash(req.body.password, salt)
+          const newUser = await UserModel.create({
+               username: req.body.username,
+               email: req.body.email,
+               password: userpasswordHashed,
+               phone: req.body.phone,
+               firstName: req.body.firstName,
+               lastName: req.body.lastName
+          })
 
           const accessToken = generateToken(newUser);
-          res.status(201).json({ 
-               message: "User Created Successfully",
-               accessToken,
-               newUser: { username: newUser.username, email: newUser.email, verified: newUser.verified, userId: newUser._id },
-          })
+          const refreshToken = generateRefreshToken(newUser);
+          newUser.refreshToken = refreshToken;
+          await newUser.save();
+          res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3 * 60 * 60 * 1000 });
+          res.status(201).json({token: accessToken })
      } catch (error) {
-          console.log("Error Signing Up The User", error)
+          console.log("Error Creating account: ", error)
           if (error.name === 'ValidationError') {
                const errors = Object.keys(error.errors).map(key => error.errors[key].message);
                res.status(400).json({ errors });
           } else {
-               res.status(500).json({ error: 'Internal Server Error' });
+               res.status(500).json({ error: 'Internal Server Error' + error });
           }
      }
 }
@@ -60,8 +67,10 @@ const signInUser = async (req, res) => {
 
           const user = await UserModel.findOne({ email });
           if (!user) {
+               console.log("Account not found! Check your email")
                return res.status(401).json({ error: 'Account not found! Check your email' });
           }
+          console.log("User Found: ", user)
 
           const isPasswordMatch = await bcrypt.compare(password, user.password);
           if (!isPasswordMatch) {
@@ -69,12 +78,11 @@ const signInUser = async (req, res) => {
           }
 
           const accessToken = generateToken(user);
-
-          res.status(200).json({
-               message: "Login successfully",
-               user: { username: user.username, email: user.email, userId: user._id, verified: user.verified },
-               accessToken
-          })
+          const refreshToken = generateRefreshToken(user);
+          user.refreshToken = refreshToken;
+          await user.save();
+          res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3 * 60 * 60 * 1000 });
+          res.status(200).json({ token: accessToken });
      } catch (error) {
           console.log("Error Signing In The User", error)
           if (error.name === 'ValidationError') {
@@ -86,6 +94,31 @@ const signInUser = async (req, res) => {
      }
 }
 
+const gettingUserData = async (req, res) => {
+     try {
+          const userId = req.user.id;
+          const user = await UserModel.findById(userId).select('-password -__v -refreshToken -resetPasswordToken -resetPasswordExpires -createdAt -updatedAt');
+          if (!user) return res.status(404).json({ error: 'User not found' });
+          res.status(200).json(user);
+     } catch (error) {
+          console.warn("Internal Server Error", error)
+          res.status(500).json({ error: 'Internal Server Error' });
+     }
+}
 
+const handleRefreshToken = async (req, res) => { 
+     const cookies = req.cookies;
+     if (!cookies?.refreshToken) return res.status(401).json({ error: 'Unauthorized' });
+     const refreshToken = cookies.refreshToken;
 
-module.exports = { registerUser, signInUser }
+     const user = UserModel.findOne({ refreshToken })
+     if (!user) return res.status(403).json({ error: 'Forbidden' });
+
+     jwt.verify(refreshToken, process.env.JSON_WEB_TOKEN_REFRESH_SECRET, (err, decoded) => {
+          if (err || user._id.toString() !== decoded.id) return res.status(403).json({ error: 'Forbidden' });
+          const accessToken = generateToken(user);
+          res.status(200).json({ token: accessToken });
+     })
+}
+
+module.exports = { registerUser, signInUser, gettingUserData, handleRefreshToken }

@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const querystring = require('querystring')
+const UserModel = require("../models/UserModel")
 const axios = require('axios');
 const saveTokensToDB = require('./SavingController')
 const pkceStore = {};
@@ -66,12 +67,13 @@ const callbackRoute = async (req, res) => {
           });
 
           const { access_token, scope, expires_in } = response.data;
+          console.log("Access tokens: ", access_token)
 
           // Fetch user ID from X
           const userInfo = await axios.get(`${process.env.TWITTER}/2/users/me`, {
-              headers: {
-                  Authorization: `Bearer ${access_token}`,
-              },
+               headers: {
+                    Authorization: `Bearer ${access_token}`,
+               },
           });
 
           const { id, username } = userInfo.data.data;
@@ -85,7 +87,7 @@ const callbackRoute = async (req, res) => {
           await saveTokensToDB(userId, 'Twitter', tokens);
           delete pkceStore[state];
      
-          res.redirect(`${process.env.CLIENT_URL_REDIRECT_SUCCESS}?status=success`)
+          res.redirect(`${process.env.CLIENT_URL_REDIRECT_SUCCESS}/dashboard?status=success`)
      } catch (error) {
           console.error(error.response?.data || error.message);
           res.redirect(`${process.env.CLIENT_URL_REDIRECT_SUCCESS}?message=${encodeURIComponent("Failed to exchange authorization code")}&status=error`);
